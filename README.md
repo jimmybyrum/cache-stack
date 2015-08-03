@@ -12,6 +12,7 @@ var cacheStack = require('cache-stack');
 
 cacheStack(
   function(onResult) {
+    // db call, or some other longer running function
     Transaction.find({
       user: <MongoId>
     }).lean().exec(onResult);
