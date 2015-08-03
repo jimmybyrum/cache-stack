@@ -1,0 +1,37 @@
+{
+  "name": "cache-stack",
+  "version": "0.1.0",
+  "description": "Utility that caches functions (until they expire) and stacks callbacks (for longer running functions).",
+  "main": "index.js",
+  "author": {
+    "name": "Jimmy Byrum",
+    "url": "https://github.com/jimmybyrum"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jimmybyrum/cache-stack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jimmybyrum/cache-stack/issues"
+  },
+  "homepage": "http://jimmybyrum.github.io/cache-stack/",
+  "scripts": {
+    "test": "gulp eslint",
+    "build": "gulp build && ls -al dist/"
+  },
+  "keywords": [
+    "mongo",
+    "mongoose",
+    "db",
+    "query",
+    "callback",
+    "cache"
+  ],
+  "maintainers": [
+    {
+      "name": "jimmybyrum",
+      "email": "me@jimmybyrum.com"
+    }
+  ]
+}
