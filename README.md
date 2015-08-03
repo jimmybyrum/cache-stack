@@ -11,12 +11,14 @@ npm install cache-stack
 var cacheStack = require('cache-stack');
 
 cacheStack(
+
+  // db call, or some other longer running function
   function(onResult) {
-    // db call, or some other longer running function
     Transaction.find({
       user: <MongoId>
     }).lean().exec(onResult);
   },
+
   { // everything, including this object, is optional
     expires: '+1 hour', // default is +1 minute
                         // milliseconds, seconds, minutes, hours, days, months, years
@@ -25,10 +27,12 @@ cacheStack(
     useCache: true // set to false if you want a new execution of the function.
                    // default is true
   },
+
   // the last param will always be the clearCache function
   function(errors, results, clearCache) {
     // do something with the results
     ...
   }
+
 );
 ```
