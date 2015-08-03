@@ -1,5 +1,7 @@
 'use strict';
 
+var slugify = require('slugify');
+
 var extend = require('util')._extend;
 
 module.exports = cacheBack;
@@ -67,11 +69,9 @@ function getCached(cache, opts) {
       if (opts.debug) {
         console.log('Removing expired results');
       }
+      cache.expires = getExpires(opts.expires);
       cache.results = undefined;
     } else {
-      if (opts.debug) {
-        console.log('Replying from cache');
-      }
       return cache;
     }
   }
@@ -79,7 +79,8 @@ function getCached(cache, opts) {
 }
 
 function getCache(fn, opts) {
-  var cacheId = fn.toString();
+  var cacheId = slugify(opts.key || fn.toString());
+  // console.warn(cacheId);
   var cache = caches[cacheId];
   if (!cache) {
     caches[cacheId] = {

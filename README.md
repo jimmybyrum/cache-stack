@@ -19,6 +19,10 @@ var cs = cacheStack(
   },
 
   { // everything, including this object, is optional
+    key: 'unique-id-1234', // by default, cacheStack will try to create a key
+                           // for the data based on the first argument.
+                           // if you don't expect that to be unique, then pass
+                           // a unique key here.
     expires: '+1 hour', // default is +1 minute
                         // milliseconds, seconds, minutes, hours, days, months, years
     debug: true, // outputs some console logs so that you can see what's happening.
