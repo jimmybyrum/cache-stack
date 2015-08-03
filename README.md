@@ -11,7 +11,6 @@ npm install cache-stack
 var cacheStack = require('cache-stack');
 
 cacheStack(
-
   // db call, or some other longer running function
   function(onResult) {
     Transaction.find({
@@ -33,6 +32,5 @@ cacheStack(
     // do something with the results
     ...
   }
-
 );
 ```
