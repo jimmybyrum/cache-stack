@@ -16,17 +16,15 @@
     "url": "https://github.com/jimmybyrum/cache-stack/issues"
   },
   "homepage": "http://jimmybyrum.github.io/cache-stack/",
-  "scripts": {
-    "test": "gulp eslint",
-    "build": "gulp build && ls -al dist/"
-  },
   "keywords": [
     "mongo",
     "mongoose",
     "db",
     "query",
     "callback",
-    "cache"
+    "cache",
+    "stack",
+    "expire"
   ],
   "maintainers": [
     {
