@@ -10,8 +10,8 @@ npm install cache-stack
 ```js
 var cacheStack = require('cache-stack');
 
-cacheStack(
-  // db call, or some other longer running function
+var cs = cacheStack(
+  // db call, or some other longer running operation
   function(onResult) {
     Transaction.find({
       user: <MongoId>
@@ -27,10 +27,10 @@ cacheStack(
                    // default is true
   },
 
-  // the last param will always be the clearCache function
-  function(errors, results, clearCache) {
-    // do something with the results
-    ...
+  function() {
+    // do something when the function returns data
   }
 );
+
+// cs.clear(); to clear the cache immediately.
 ```

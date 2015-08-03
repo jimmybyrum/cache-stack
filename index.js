@@ -2,7 +2,7 @@
 
 var extend = require('util')._extend;
 
-module.exports = query;
+module.exports = cacheBack;
 
 var caches = {};
 var defaults = {
@@ -11,22 +11,22 @@ var defaults = {
   expires: '+1 minute'
 };
 
-function query(query, opts, callback) {
+function cacheBack(fn, opts, callback) {
   if (!callback) {
     callback = opts;
     opts = defaults;
   } else {
     opts = extend(defaults, opts);
   }
-  if (opts.debug) {
-    console.log('Config:', opts);
-  }
 
-  var cache = getCache(query, opts);
+  var cache = getCache(fn, opts);
 
-  var hasCachedQuery = getCached(cache, opts);
-  if (hasCachedQuery) {
+  var hasCached = getCached(cache, opts);
+  if (hasCached) {
     // use cached data, callback and return
+    if (opts.debug) {
+      console.log('Calling back with cached data');
+    }
     callback.apply(this, cache.results);
     return cache;
   }
@@ -34,22 +34,22 @@ function query(query, opts, callback) {
   // add callback to the list
   cache.callbacks.push(callback);
 
-  // if there's only 1 callback (this if the first time the query is being run)
-  // or if useCache is false, query the db.
+  // if there's only 1 callback (this if the first time the function is being run)
+  // or if useCache is false, run the function
   if (cache.callbacks.length === 1 || !opts.useCache) {
-    // only run if it's the first time this query is being called.
     if (opts.debug) {
-      console.log('Run query...');
+      console.log('Run function with config: ', opts);
     }
-    query(function() {
-      // console.warn(arguments);
-      if (opts.debug) {
-        console.log('Got results');
-      }
-      // save the query results
+    fn(function() {
+      // save the fn results
       cache.results = arguments;
 
       // call back all the callbacks
+      if (opts.debug) {
+        if (cache.callbacks.length) {
+          console.log('Calling ' + cache.callbacks.length + ' callbacks');
+        }
+      }
       while(cache.callbacks.length > 0) {
         var cb = cache.callbacks.shift();
         cb.apply(this, cache.results);
@@ -78,11 +78,8 @@ function getCached(cache, opts) {
   return false;
 }
 
-function getCache(query, opts) {
-  var cacheId = query.toString();
-  if (opts.debug) {
-    // console.log(cacheId);
-  }
+function getCache(fn, opts) {
+  var cacheId = fn.toString();
   var cache = caches[cacheId];
   if (!cache) {
     caches[cacheId] = {
