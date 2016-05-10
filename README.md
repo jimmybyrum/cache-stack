@@ -38,3 +38,43 @@ var cs = cacheStack(
 
 // cs.clear(); to clear the cache immediately.
 ```
+
+#### Example
+See this running on tonicdev here:
+https://tonicdev.com/jimmybyrum/57318ea5ac945f1100995325
+```js
+var cacheStack = require('cache-stack');
+
+// fake a long operation that takes 1 second to the complete.
+function longOp(onResult, stack) {
+  setTimeout(function() {
+    console.log('running longOp (should only be logged once)');
+    onResult(null, 'ok', stack);
+  }, 1000);
+}
+
+// bind our longOp and config to stacked
+var stacked = cacheStack.bind(this, longOp, {
+  expires: '+1 hour'
+});
+
+// Call stacked 3 times immediately. After 1 second (the 
+// length of time our longOp takes to run), all 3 callbacks
+// will be called.
+stacked(callback);
+stacked(callback);
+stacked(callback);
+
+// When we do another call to stacked, it will be returned the 
+// cached version immediately.
+setTimeout(function() {
+  stacked(callback);
+}, 2000);
+
+
+var i = 0;
+function callback(err, res) {
+  console.log(res + ':' + i);
+  i++;    
+};
+```
